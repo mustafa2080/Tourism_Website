@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src="{{ package.image.url }}" alt="{{ package.name }}" class="w-full h-64 object-cover">
+        <div class="p-6">
+            <h1 class="text-3xl font-bold mb-4">{{ package.name }}</h1>
+            <p class="text-gray-600 mb-4">{{ package.description }}</p>
+            
+            <!-- عرض المدة والوجهة -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">مدة الرحلة</h2>
+                    <p class="text-gray-600">{{ package.duration }} أيام</p>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">الوجهة</h2>
+                    <p class="text-gray-600">{{ package.destination.name }}</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">تفاصيل الرحلة</h2>
+                    <p class="text-gray-600">{{ package.itinerary }}</p>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold mb-2">الخدمات المتضمنة</h2>
+                    <p class="text-gray-600">{{ package.included_services }}</p>
+                </div>
+            </div>
+
+            <!-- أزرار الحجز والمفضلة -->
+            <div class="flex justify-between items-center">
+                <span class="text-2xl font-bold">{{ package.price }} جنيه</span>
+                <div class="flex space-x-4 gap-4">
+                    {% if user.is_authenticated %}
+                        {% if in_wishlist %}
+                            <a href="{% url 'packages:wishlist_remove' package.id %}" 
+                               class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                                <i class="fas fa-heart"></i> إزالة من المفضلة
+                            </a>
+                        {% else %}
+                            <a href="{% url 'packages:wishlist_add' package.id %}" 
+                               class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300">
+                                <i class="far fa-heart"></i> إضافة للمفضلة
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                    <!-- templates/packages/package_detail.html -->
+                    <a href="{% url 'bookings:create_booking' package.id %}" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                        احجز الآن
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- عرض التقييمات -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">التقييمات</h2>
+        <div class="space-y-4">
+            {% for review in package.reviews.all %}
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-2">
+                    <!-- عرض النجوم -->
+                    <span class="text-yellow-500">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                    </span>
+                    <span class="mr-2 text-gray-600">بواسطة {{ review.user.username }}</span>
+                </div>
+                <p class="text-gray-600">{{ review.comment }}</p>
+            </div>
+            {% empty %}
+            <p class="text-gray-600">لا توجد تقييمات حتى الآن.</p>
+            {% endfor %}
+        </div>
+
+        <!-- رابط لإضافة تقييم جديد -->
+        <div class="mt-8">
+            <a href="{% url 'packages:review_create' package.slug %}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300">أضف تقييمًا</a>
+        </div>
+    </div>
+
+    <!-- الباقات ذات الصلة -->
+    <h2 class="text-2xl font-bold mt-8 mb-4">باقات ذات صلة</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for related_package in related_packages %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ related_package.image.url }}" alt="{{ related_package.name }}" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-2">{{ related_package.name }}</h2>
+                <p class="text-gray-600 mb-4">{{ related_package.description|truncatechars:100 }}</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold">{{ related_package.price }} جنيه</span>
+                    <a href="{% url 'packages:package_detail' related_package.slug %}" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">تفاصيل</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

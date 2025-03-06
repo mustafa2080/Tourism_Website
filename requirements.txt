@@ -1,0 +1,8 @@
+Django>=5.1 # يمكنك تعديل النسخة حسب احتياجات مشروعك
+django-allauth
+django-rosetta
+django-crispy-forms
+crispy-tailwind
+PyJWT
+cryptography
+django-credit-cards

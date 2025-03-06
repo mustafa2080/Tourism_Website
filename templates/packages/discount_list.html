@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">الخصومات المتاحة</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for discount in discounts %}
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+            <!-- Package Image -->
+            <div class="relative h-48">
+                {% if discount.package.image %}
+                <img src="{{ discount.package.image.url }}" alt="{{ discount.package.name }}" class="w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                    لا توجد صورة
+                </div>
+                {% endif %}
+                <!-- Discount Badge -->
+                <div class="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                    {{ discount.percentage }}% خصم
+                </div>
+            </div>
+
+            <!-- Package Details -->
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-3">{{ discount.package.name }}</h2>
+                <p class="text-gray-600 mb-4">{{ discount.package.description|truncatechars:100 }}</p>
+
+                <!-- Price and CTA -->
+                <div class="flex justify-between items-center">
+                    <div>
+                        <!-- السعر بعد الخصم -->
+                        <span class="text-lg font-bold text-gray-800">
+                            {{ discount.package.price|floatformat:2 }} جنيه
+                        </span>
+                        <!-- السعر الأصلي مع خط يتوسطه -->
+                        <span class="text-sm text-gray-500 line-through ml-2">
+                            {{ discount.package.price|floatformat:2 }} جنيه
+                        </span>
+                        <!-- السعر بعد الخصم -->
+                        <span class="block text-green-600 font-semibold mt-1">
+                            بعد الخصم: {{ discount.discounted_price|floatformat:2 }} جنيه
+                        </span>
+                    </div>
+                    <a href="{% url 'packages:package_detail' discount.package.slug %}" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                        تفاصيل
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

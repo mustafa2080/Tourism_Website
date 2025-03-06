@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}اتصل بنا - موقع السياحة{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
+    <!-- Hero Section with Enhanced Design -->
+    <div class="relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 py-20 mb-12">
+        <div class="absolute inset-0">
+            <img src="{% static 'images/contact-bg.jpg' %}" alt="Contact background" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-violet-600/50 to-indigo-600/50 mix-blend-multiply"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-extrabold text-white mb-6 animate-fade-in-up">تواصل معنا</h1>
+            <p class="text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed">نحن هنا لمساعدتك والإجابة على جميع استفساراتك</p>
+            <div class="mt-8">
+                <a href="#contact-form" class="inline-flex items-center px-8 py-3 border border-transparent text-lg font-medium rounded-full text-indigo-600 bg-white hover:bg-indigo-50 transition-all duration-300 transform hover:scale-105">
+                    ابدأ المحادثة
+                    <i class="fas fa-arrow-down mr-2 animate-bounce"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Enhanced Contact Info Card -->
+            <div class="space-y-8">
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-xl p-8 backdrop-blur-lg transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">معلومات الاتصال</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg">
+                                    <i class="fas fa-map-marker-alt text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="mr-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">العنوان</h3>
+                                <p class="text-gray-600 text-lg">٢٠أ عمارات العبور - صلاح سالم - مصر الجديدة</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg">
+                                    <i class="fas fa-phone-alt text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="mr-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">الهاتف</h3>
+                                <a href="tel:+20123456789" class="text-lg text-gray-600 hover:text-indigo-600 transition-colors duration-300 group flex items-center">
+                                    <span dir="ltr">+20 1100002714</span>
+                                    <i class="fas fa-arrow-left mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg">
+                                    <i class="fas fa-envelope text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="mr-6">
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">البريد الإلكتروني</h3>
+                                <a href="mailto:contact@tourism.com" class="text-lg text-gray-600 hover:text-indigo-600 transition-colors duration-300 group flex items-center">
+                                    info@auroratravel.com
+                                    <i class="fas fa-arrow-left mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Social Media Section -->
+                    <div class="mt-12 pt-8 border-t border-gray-200">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">تابعنا على</h3>
+                        <div class="flex gap-6">
+                            <a href="#" class="group">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg transform transition-all duration-300 group-hover:scale-110">
+                                    <i class="fab fa-facebook-f text-white text-2xl"></i>
+                                </div>
+                            </a>
+                            <a href="#" class="group">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg transform transition-all duration-300 group-hover:scale-110">
+                                    <i class="fab fa-twitter text-white text-2xl"></i>
+                                </div>
+                            </a>
+                            <a href="#" class="group">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-500 p-4 rounded-2xl shadow-lg transform transition-all duration-300 group-hover:scale-110">
+                                    <i class="fab fa-instagram text-white text-2xl"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Contact Form -->
+            <div id="contact-form" class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-xl p-8 backdrop-blur-lg">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">أرسل لنا رسالة</h2>
+                <form method="post" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <!-- Name Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.name.id_for_label }}" class="block text-lg font-semibold text-gray-700">
+                            {{ form.name.label }}
+                        </label>
+                        <div class="relative group">
+                            {{ form.name }}
+                            <div class="absolute inset-0 border-2 border-indigo-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        </div>
+                    </div>
+            
+                    <!-- Email Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.email.id_for_label }}" class="block text-lg font-semibold text-gray-700">
+                            {{ form.email.label }}
+                        </label>
+                        <div class="relative group">
+                            {{ form.email }}
+                            <div class="absolute inset-0 border-2 border-indigo-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        </div>
+                    </div>
+            
+                    <!-- Message Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.message.id_for_label }}" class="block text-lg font-semibold text-gray-700">
+                            {{ form.message.label }}
+                        </label>
+                        <div class="relative group">
+                            {{ form.message }}
+                            <div class="absolute inset-0 border-2 border-indigo-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        </div>
+                    </div>
+            
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transform transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-xl hover:shadow-2xl">
+                        إرسال الرسالة
+                        <i class="fas fa-paper-plane mr-3"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Enhanced Map Section -->
+        <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-xl p-8 backdrop-blur-lg overflow-hidden">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">موقعنا</h2>
+            <div class="h-[500px] rounded-2xl overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.789!2d31.123!3d30.456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDI3JzIxLjYiTiAzMcKwMDcnMjIuOCJF!5e0!3m2!1sen!2seg!4v1234567890!5m2!1sen!2seg" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy"
+                    class="rounded-2xl">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in-up {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 1s ease-out;
+    }
+
+    input, textarea {
+        @apply w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-300;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% comment %} {% extends 'base.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination List</title>
+</head>
+{% block content %}
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-md p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-blue-600">Tourist Destinations</h1>
+            <form method="GET" action="{% url 'apps.destinations:search' %}" class="flex space-x-2">
+                <input 
+                    type="text" 
+                    name="q" 
+                    value="{{ request.GET.q }}" 
+                    placeholder="Search destinations" 
+                    class="p-2 border rounded-lg">
+                <select 
+                    name="category" 
+                    class="p-2 border rounded-lg bg-white text-gray-700">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category.slug }}" 
+                        {% if request.GET.category == category.slug %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-6">
+        {% if destinations %}
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+            {% for destination in destinations %}
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <img src="{{ destination.image.url }}" alt="{{ destination.name }}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h2 class="text-lg font-semibold">{{ destination.name }}</h2>
+                    <p class="text-gray-600">{{ destination.description|truncatewords:15 }}</p>
+                    <a href="{% url 'apps.destinations:destination_detail' destination.id %}" class="text-blue-600 mt-4 block">Read More</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-600 text-center">No destinations found.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
+{% endblock %} {% endcomment %}

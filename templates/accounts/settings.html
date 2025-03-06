@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}الإعدادات - موقع السياحة{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- رسائل التأكيد -->
+        {% if messages %}
+        <div class="mb-8">
+            {% for message in messages %}
+            <div class="p-4 mb-4 text-sm rounded-lg {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- العنوان الرئيسي -->
+        <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-8">
+            الإعدادات
+        </h1>
+
+        <!-- البطاقة الرئيسية -->
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="p-6 sm:p-8">
+                <!-- قسم المعلومات الشخصية -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">المعلومات الشخصية</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_form" value="true">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="first_name" class="block text-sm font-medium text-gray-700">الاسم الأول</label>
+                                <input type="text" id="first_name" name="first_name" value="{{ request.user.first_name }}"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="last_name" class="block text-sm font-medium text-gray-700">الاسم الأخير</label>
+                                <input type="text" id="last_name" name="last_name" value="{{ request.user.last_name }}"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
+                                <input type="email" id="email" name="email" value="{{ request.user.email }}"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700">رقم الهاتف</label>
+                                <input type="text" id="phone" name="phone" value="{{ request.user.phone }}"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700">العنوان</label>
+                                <textarea id="address" name="address"
+                                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ request.user.address }}</textarea>
+                            </div>
+                            <div>
+                                <label for="profile_image" class="block text-sm font-medium text-gray-700">صورة الملف الشخصي</label>
+                                <input type="file" id="profile_image" name="profile_image"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                                حفظ التغييرات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- قسم التفضيلات -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">التفضيلات</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_form" value="true">
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" class="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500" {% if request.user.userprofile.newsletter_subscription %}checked{% endif %}>
+                                <label for="newsletter_subscription" class="ml-2 text-sm text-gray-700">الاشتراك في النشرة الإخبارية</label>
+                            </div>
+                            <div>
+                                <label for="preferred_currency" class="block text-sm font-medium text-gray-700">العملة المفضلة</label>
+                                <select id="preferred_currency" name="preferred_currency"
+                                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="USD" {% if request.user.userprofile.preferred_currency == 'USD' %}selected{% endif %}>دولار أمريكي (USD)</option>
+                                    <option value="EUR" {% if request.user.userprofile.preferred_currency == 'EUR' %}selected{% endif %}>يورو (EUR)</option>
+                                    <option value="EGP" {% if request.user.userprofile.preferred_currency == 'EGP' %}selected{% endif %}>جنيه مصري (EGP)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="travel_preferences" class="block text-sm font-medium text-gray-700">تفضيلات السفر</label>
+                                <textarea id="travel_preferences" name="travel_preferences"
+                                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ request.user.userprofile.travel_preferences }}</textarea>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                                حفظ التفضيلات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- قسم تغيير كلمة المرور -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">تغيير كلمة المرور</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="password_form" value="true">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="old_password" class="block text-sm font-medium text-gray-700">كلمة المرور الحالية</label>
+                                <input type="password" id="old_password" name="old_password"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="new_password" class="block text-sm font-medium text-gray-700">كلمة المرور الجديدة</label>
+                                <input type="password" id="new_password" name="new_password"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="confirm_password" class="block text-sm font-medium text-gray-700">تأكيد كلمة المرور</label>
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                                تغيير كلمة المرور
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

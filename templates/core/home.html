@@ -1,0 +1,282 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}الصفحة الرئيسية - شركة السياحة المصرية{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<!-- Hero Section -->
+<section class="relative h-screen">
+    <!-- Swiper -->
+    <div class="swiper-container h-full">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide relative">
+                <img src="{% static 'admin/img/hurghada.jpg' %}" alt="مصر السياحية" 
+                     class="w-full h-full object-cover"
+                     onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
+                <div class="absolute inset-0 bg-black opacity-50"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-center px-4">
+                    <div class="max-w-4xl">
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                            اكتشف جمال مصر السياحي
+                        </h1>
+                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                            رحلات سياحية مميزة إلى أجمل المعالم السياحية في مصر
+                        </p>
+                        <a href="{% url 'packages:package_list' %}" 
+                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                            اكتشف رحلاتنا
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="swiper-slide relative">
+                <img src="{% static 'admin/img/luxor.jpg' %}" alt="الأقصر السياحية" 
+                     class="w-full h-full object-cover"
+                     onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
+                <div class="absolute inset-0 bg-black opacity-50"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-center px-4">
+                    <div class="max-w-4xl">
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                            استمتع بجمال الأقصر
+                        </h1>
+                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                            رحلات إلى المعابد الفرعونية والمناظر الخلابة
+                        </p>
+                        <a href="{% url 'packages:package_list' %}" 
+                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                            اكتشف رحلاتنا
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="swiper-slide relative">
+                <img src="{% static 'admin/img/sharm.jpg' %}" alt="شرم الشيخ السياحية" 
+                     class="w-full h-full object-cover"
+                     onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
+                <div class="absolute inset-0 bg-black opacity-50"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-center px-4">
+                    <div class="max-w-4xl">
+                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                            استمتع بشواطئ شرم الشيخ
+                        </h1>
+                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                            رحلات إلى أجمل الشواطئ والمنتجعات الفاخرة
+                        </p>
+                        <a href="{% url 'packages:package_list' %}" 
+                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                            اكتشف رحلاتنا
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+<!-- Popular Destinations Section -->
+<section class="py-16 px-4 bg-gray-50" id="destinations">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">الوجهات السياحية المميزة</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for destination in featured_destinations %}
+            <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                <img src="{{ destination.image.url }}" alt="{{ destination.name }}" 
+                     class="w-full h-50 object-cover"
+                     onerror="this.src='https://via.placeholder.com/400x300?text=صورة+غير+متاحة'">
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">{{ destination.name }}</h3>
+                    <p class="text-gray-600 mb-4">{{ destination.description|truncatechars:100 }}</p>
+                    <a href="{% url 'destinations:destination_detail' destination.slug %}" 
+                       class="text-blue-600 font-semibold hover:text-blue-800">
+                        اكتشف المزيد →
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-600 text-center col-span-full">لا توجد وجهات مميزة حاليًا.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 px-4 bg-white">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-12">لماذا تختارنا؟</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-star text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">خدمة متميزة</h3>
+                <p class="text-gray-600">نقدم أفضل خدمة لعملائنا مع الاهتمام بأدق التفاصيل</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="text-center">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">حجز آمن</h3>
+                <p class="text-gray-600">نضمن لك حجزًا آمنًا وموثوقًا به مع دعم على مدار الساعة</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="text-center">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-dollar-sign text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">أسعار تنافسية</h3>
+                <p class="text-gray-600">نقدم أفضل الأسعار مع ضمان جودة الخدمة</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="py-16 px-4 bg-blue-600">
+    <div class="container mx-auto text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">اشترك في نشرتنا البريدية</h2>
+        <p class="text-white text-lg mb-8">احصل على أحدث العروض والأخبار السياحية</p>
+        <form class="max-w-md mx-auto flex gap-4">
+            <input type="email" placeholder="بريدك الإلكتروني" 
+                   class="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <button type="submit" 
+                    class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transform transition hover:scale-105">
+                اشترك الآن
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-16 px-4 bg-gray-100">
+    <div class="container mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4">مستعد لبدء رحلتك؟</h2>
+        <p class="text-xl text-gray-600 mb-8">دعنا نساعدك في تخطيط رحلة العمر</p>
+        <a href="{% url 'core:contact' %}" 
+           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+            تواصل معنا
+        </a>
+    </div>
+
+    {% if messages %}
+    <div id="messages" class="fixed top-4 right-4 space-y-4 z-50">
+        {% for message in messages %}
+        <div class="message flex items-center justify-between p-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out animate__animated animate__fadeInRight
+            {% if message.tags == 'error' %}bg-red-500
+            {% elif message.tags == 'warning' %}bg-yellow-500
+            {% elif message.tags == 'info' %}bg-blue-500
+            {% else %}bg-green-500{% endif %}">
+            <!-- أيقونة الرسالة -->
+            <div class="flex items-center">
+                <span class="mr-2">
+                    {% if message.tags == 'error' %}
+                    <i class="fas fa-times-circle text-xl"></i>
+                    {% elif message.tags == 'warning' %}
+                    <i class="fas fa-exclamation-triangle text-xl"></i>
+                    {% elif message.tags == 'info' %}
+                    <i class="fas fa-info-circle text-xl"></i>
+                    {% else %}
+                    <i class="fas fa-check-circle text-xl"></i>
+                    {% endif %}
+                </span>
+                <span class="text-white">{{ message }}</span>
+            </div>
+            <!-- زر الإغلاق -->
+            <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.querySelectorAll('.message');
+        messages.forEach((message, index) => {
+            setTimeout(() => {
+                message.classList.remove('opacity-0', 'translate-y-4');
+                message.classList.add('opacity-100', 'translate-y-0');
+            }, 100 * index);
+
+            setTimeout(() => {
+                message.classList.remove('opacity-100', 'translate-y-0');
+                message.classList.add('opacity-0', 'translate-y-4');
+            }, 5000 + 100 * index);
+
+            setTimeout(() => {
+                message.remove();
+            }, 5300 + 100 * index);
+        });
+
+        // SweetAlert2 للرسائل التفاعلية
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: '{{ message.tags }}',
+                    title: '{{ message }}',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    toast: true,
+                    position: 'top-end',
+                    background: '{% if message.tags == "error" %}#ef4444{% elif message.tags == "warning" %}#f59e0b{% elif message.tags == "info" %}#3b82f6{% else %}#10b981{% endif %}',
+                    iconColor: '#ffffff',
+                    color: '#ffffff',
+                });
+            {% endfor %}
+        {% endif %}
+    });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.swiper-container', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            // Effect
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+        });
+    });
+</script>
+{% endblock %}

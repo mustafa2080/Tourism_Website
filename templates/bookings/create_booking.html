@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-r from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold text-center text-gray-900 mb-8">دفع بنكي</h1>
+        <div class="bg-white p-8 rounded-xl shadow-2xl transform transition-all duration-300 hover:scale-105">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- حقل اسم البنك -->
+                <div>
+                    <label for="id_bank_name" class="block text-sm font-medium text-gray-700">اسم البنك</label>
+                    {{ form.bank_name }}
+                </div>
+
+                <!-- حقل اسم صاحب الحساب -->
+                <div>
+                    <label for="id_account_holder" class="block text-sm font-medium text-gray-700">اسم صاحب الحساب</label>
+                    {{ form.account_holder }}
+                </div>
+
+                <!-- حقل تاريخ التحويل -->
+                <div>
+                    <label for="id_transaction_date" class="block text-sm font-medium text-gray-700">تاريخ التحويل</label>
+                    {{ form.transaction_date }}
+                </div>
+
+                <!-- حقل رقم التحويل -->
+                <div>
+                    <label for="id_transaction_number" class="block text-sm font-medium text-gray-700">رقم التحويل</label>
+                    {{ form.transaction_number }}
+                </div>
+
+                <!-- حقل المبلغ المحول -->
+                <div>
+                    <label for="id_amount" class="block text-sm font-medium text-gray-700">المبلغ المحول</label>
+                    {{ form.amount }}
+                </div>
+
+                <!-- حقل صورة الإيصال -->
+                <div>
+                    <label for="id_receipt_image" class="block text-sm font-medium text-gray-700">صورة الإيصال</label>
+                    <div class="mt-1 flex items-center">
+                        <label for="id_receipt_image" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                            <i class="fas fa-upload mr-2"></i>
+                            اختر ملفًا
+                        </label>
+                        <span id="file-name" class="ml-3 text-gray-600"></span>
+                    </div>
+                    {{ form.receipt_image }}
+                </div>
+
+                <!-- زر التأكيد -->
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        تأكيد الدفع
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // عرض اسم الملف المختار
+    document.getElementById('id_receipt_image').addEventListener('change', function (e) {
+        const fileName = e.target.files[0].name;
+        document.getElementById('file-name').textContent = fileName;
+    });
+</script>
+{% endblock %}

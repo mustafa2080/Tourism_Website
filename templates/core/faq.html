@@ -1,0 +1,41 @@
+{# templates/core/faq.html #}
+{% extends 'core/base.html' %}
+
+{% block title %}الأسئلة الشائعة - موقع السياحة{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="text-center mb-4">الأسئلة الشائعة</h1>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            كيف يمكنني حجز رحلة؟
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            يمكنك حجز رحلة من خلال اختيار الوجهة المناسبة وملء نموذج الحجز.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            ما هي طرق الدفع المتاحة؟
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            نقبل الدفع عن طريق البطاقات الائتمانية والتحويل البنكي.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- يمكن إضافة المزيد من الأسئلة هنا -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

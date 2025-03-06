@@ -1,0 +1,7 @@
+<!-- packages/templates/packages/cancel_booking.html -->
+<form method="post">
+    {% csrf_token %}
+    <p>هل أنت متأكد من أنك تريد إلغاء هذا الحجز؟</p>
+    <button type="submit" class="btn btn-danger">نعم، إلغاء الحجز</button>
+    <a href="{% url 'packages:booking_list' %}" class="btn btn-secondary">إلغاء</a>
+</form>

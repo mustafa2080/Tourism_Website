@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">لوحة تحليل البيانات</h1>
+
+    <!-- إحصائيات سريعة -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- إجمالي الحجوزات -->
+        <div class="bg-white p-6 rounded-lg shadow-lg transform transition hover:scale-105" data-aos="fade-right">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-calendar-check text-4xl text-blue-500"></i>
+                <div>
+                    <p class="text-gray-600">إجمالي الحجوزات</p>
+                    <p class="text-2xl font-bold">{{ total_bookings }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- إجمالي الإيرادات -->
+        <div class="bg-white p-6 rounded-lg shadow-lg transform transition hover:scale-105" data-aos="fade-up">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-coins text-4xl text-green-500"></i>
+                <div>
+                    <p class="text-gray-600">إجمالي الإيرادات</p>
+                    <p class="text-2xl font-bold">{{ total_revenue }} جنيه</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- إجمالي الزوار -->
+        <div class="bg-white p-6 rounded-lg shadow-lg transform transition hover:scale-105" data-aos="fade-left">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-users text-4xl text-purple-500"></i>
+                <div>
+                    <p class="text-gray-600">إجمالي الزوار</p>
+                    <p class="text-2xl font-bold">{{ total_visitors }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الرسوم البيانية -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- رسم بياني للحجوزات -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+            <h2 class="text-xl font-semibold mb-4">الحجوزات حسب الشهر</h2>
+            <canvas id="bookingsChart"></canvas>
+        </div>
+
+        <!-- رسم بياني للزوار -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+            <h2 class="text-xl font-semibold mb-4">الزوار حسب الشهر</h2>
+            <canvas id="visitorsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- تحليل الحجوزات -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- الحجوزات حسب الحالة -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+            <h2 class="text-xl font-semibold mb-4">الحجوزات حسب الحالة</h2>
+            <ul>
+                {% for status, count in bookings_by_status.items %}
+                <li class="mb-2">
+                    <span class="font-medium text-gray-700">{{ status }}:</span>
+                    <span class="text-gray-600">{{ count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- الحجوزات حسب الوجهة -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+            <h2 class="text-xl font-semibold mb-4">الحجوزات حسب الوجهة</h2>
+            <ul>
+                {% for destination, count in bookings_by_destination.items %}
+                <li class="mb-2">
+                    <span class="font-medium text-gray-700">{{ destination }}:</span>
+                    <span class="text-gray-600">{{ count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- المزيد من التحليلات -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- الوجهة الأكثر شعبية -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+            <h2 class="text-xl font-semibold mb-4">الوجهة الأكثر شعبية</h2>
+            <p class="text-2xl font-bold text-gray-800">{{ most_popular_destination }}</p>
+        </div>
+
+        <!-- الحجوزات حسب الشهر -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+            <h2 class="text-xl font-semibold mb-4">الحجوزات حسب الشهر</h2>
+            <ul>
+                {% for month, count in bookings_by_month.items %}
+                <li class="mb-2">
+                    <span class="font-medium text-gray-700">{{ month }}:</span>
+                    <span class="text-gray-600">{{ count }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Scripts -->
+<script>
+    // رسم بياني للحجوزات
+    const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+    const bookingsChart = new Chart(bookingsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'الحجوزات',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // رسم بياني للزوار
+    const visitorsCtx = document.getElementById('visitorsChart').getContext('2d');
+    const visitorsChart = new Chart(visitorsCtx, {
+        type: 'line',
+        data: {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'الزوار',
+                data: [50, 70, 60, 80, 90, 100],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Initialize AOS -->
+<script>
+    AOS.init({
+        duration: 1000, // مدة الأنيميشن
+        once: true, // تشغيل الأنيميشن مرة واحدة فقط
+    });
+</script>
+{% endblock %}

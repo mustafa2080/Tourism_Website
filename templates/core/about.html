@@ -1,0 +1,44 @@
+{# templates/core/about.html #}
+{% extends 'base.html' %}
+
+{% block title %}من نحن - موقع السياحة{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 py-10">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-blue-600 text-center mb-6">من نحن</h1>
+            <div class="space-y-6">
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800">مرحباً بكم في موقعنا السياحي</h2>
+                    <p class="text-gray-600 leading-relaxed mt-2">
+                        نحن شركة سياحية رائدة في مجال تنظيم الرحلات السياحية والسفر. 
+                        نسعى دائماً لتقديم أفضل الخدمات لعملائنا بأسعار تنافسية.
+                    </p>
+                </section>
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800">رؤيتنا</h2>
+                    <p class="text-gray-600 leading-relaxed mt-2">
+                        أن نكون الخيار الأول للسياحة والسفر في المنطقة.
+                    </p>
+                </section>
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800">مهمتنا</h2>
+                    <p class="text-gray-600 leading-relaxed mt-2">
+                        تقديم خدمات سياحية متميزة تلبي احتياجات عملائنا وتفوق توقعاتهم.
+                    </p>
+                </section>
+                <section>
+                    <h2 class="text-xl font-semibold text-gray-800">قيمنا</h2>
+                    <ul class="list-disc list-inside text-gray-600 leading-relaxed mt-2 space-y-2">
+                        <li>الجودة والتميز في الخدمة</li>
+                        <li>المصداقية والشفافية</li>
+                        <li>الاحترافية في العمل</li>
+                        <li>رضا العملاء</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
