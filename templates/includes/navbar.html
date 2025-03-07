@@ -1,146 +1,79 @@
 {% load static %}
-<nav class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 border-b border-blue-700 relative z-50" 
-     x-data="{ 
-        isOpen: false, 
-        isProfileOpen: false,
-        toggleMenu() { this.isOpen = !this.isOpen },
-        toggleProfile() { this.isProfileOpen = !this.isProfileOpen }
-     }">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between items-center h-20">
+<nav x-data="{ isOpen: false }" class="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20">
             <!-- Logo Section -->
-            <div class="flex items-center space-x-8">
-                <a href="{% url 'core:home' %}" class="transform hover:scale-105 transition-transform duration-200">
-                    <img class="h-16 w-auto rounded-lg shadow-lg border-2 border-blue-400/50" src="{% static 'admin/img/logo.png' %}" alt="Logo">
+            <div class="flex-shrink-0 flex items-center">
+                <a href="{% url 'core:home' %}" class="flex items-center space-x-3 space-x-reverse">
+                    <img class="h-12 w-auto transition-transform hover:scale-105" src="{% static 'admin/img/logo.png' %}" alt="Logo">
+                    <span class="text-xl font-bold text-gray-800 hidden sm:block">أورورا ترافل</span>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-1 space-x-reverse">
+                <a href="{% url 'core:home' %}" 
+                   class="group relative px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-300 text-sm font-medium">
+                    <span>الرئيسية</span>
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                 </a>
                 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-1">
-                    <a href="{% url 'packages:package_list' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-box-open ml-2"></i>
-                        <span>الباقات</span>
-                    </a>
-                    <a href="{% url 'blog:post_list' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-blog ml-2"></i>
-                        <span>المدونة</span>
-                    </a>
-                    <a href="{% url 'core:about' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-info-circle ml-2"></i>
-                        <span>عنا</span>
-                    </a>
-                    <a href="{% url 'core:contact' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-envelope ml-2"></i>
-                        <span>اتصل بنا</span>
-                    </a>
-                    <a href="{% url 'packages:wishlist_list' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-heart ml-2"></i>
-                        <span>قائمة الرغبات</span>
-                    </a>
-                    <a href="{% url 'packages:discount_list' %}" class="text-white hover:bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                        <i class="fas fa-tag ml-2"></i>
-                        <span>الخصومات</span>
-                    </a>
-                </div>
-            </div>
+                <a href="{% url 'tours:list' %}" 
+                   class="group relative px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-300 text-sm font-medium">
+                    <span>الرحلات</span>
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                </a>
 
-            <!-- Search Bar with Animation -->
-            <div class="hidden md:flex items-center">
-                <div class="relative">
-                    <input type="text" placeholder="ابحث عن باقة..." 
-                           class="w-72 px-4 py-2 pr-10 bg-white/10 backdrop-blur-sm text-black placeholder-blue-200 border border-blue-400/30 rounded-lg focus:outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-400/50 transition-all duration-300">
-                    <span class="absolute left-3 top-2.5 text-blue-200">
-                        <i class="fas fa-search"></i>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Profile Section -->
-            <div class="hidden md:flex items-center space-x-4">
                 {% if user.is_authenticated %}
-                <div class="relative">
-                    <button @click="toggleProfile()" 
-                            class="flex items-center space-x-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer">
-                        <img class="h-8 w-8 rounded-full border-2 border-blue-400/50" src="{{ user.profile_image.url }}" alt="Profile Picture">
-                        <span class="text-white font-semibold">{{ user.username }}</span>
-                        <i class="fas fa-chevron-down text-white text-xs transition-transform duration-200"
-                           :class="{ 'transform rotate-180': isProfileOpen }"></i>
-                    </button>
-                    
-                    <!-- Dropdown Menu -->
-                    <div x-show="isProfileOpen" 
-                         @click.away="isProfileOpen = false"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 transform scale-95"
-                         x-transition:enter-end="opacity-100 transform scale-100"
-                         x-transition:leave="transition ease-in duration-150"
-                         x-transition:leave-start="opacity-100 transform scale-100"
-                         x-transition:leave-end="opacity-0 transform scale-95"
-                         class="right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-blue-100 overflow-hidden absolute z-50">
-
-                        <!-- Profile Header -->
-                        <div class="p-4 bg-gradient-to-r from-blue-500 to-indigo-600">
-                            <div class="flex items-center space-x-3">
-                                <img class="h-12 w-12 rounded-full border-2 border-white" src="{{ user.profile_image.url }}" alt="Profile Picture">
-                                <div class="text-white">
-                                    <p class="font-semibold">{{ user.username }}</p>
-                                    <p class="text-sm mr-3 opacity-90">{{ user.username }}</p>
-                                </div>
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" 
+                                class="flex items-center space-x-1 space-x-reverse px-4 py-2 text-gray-700 hover:text-blue-600 transition-colors duration-300">
+                            <img class="h-8 w-8 rounded-full border-2 border-gray-200" 
+                                 src="{% if user.userprofile.avatar %}{{ user.userprofile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
+                                 alt="Profile">
+                            <span class="text-sm font-medium">{{ user.get_full_name|default:user.username }}</span>
+                        </button>
+                        
+                        <div x-show="open" 
+                             @click.away="open = false"
+                             class="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100">
+                            <div class="py-1">
+                                <a href="{% url 'accounts:profile' %}" 
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">
+                                    <i class="fas fa-user ml-2"></i>حسابي
+                                </a>
+                                <a href="{% url 'accounts:settings' %}" 
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-blue-600">
+                                    <i class="fas fa-cog ml-2"></i>الإعدادات
+                                </a>
+                                <hr class="my-1">
+                                <a href="{% url 'accounts:logout' %}" 
+                                   class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt ml-2"></i>تسجيل خروج
+                                </a>
                             </div>
                         </div>
-
-                        <!-- Menu Items -->
-                        <div class="py-2 bg-white">
-                            <a href="{% url 'accounts:profile' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                                <i class="fas fa-user-circle ml-3 text-blue-600 text-lg"></i>
-                                <span>الملف الشخصي</span>
-                            </a>
-                            <a href="{% url 'packages:booking_list' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200 cursor-pointer transform hover:scale-105">
-                                <i class="fas fa-calendar-check ml-3 text-blue-600 text-lg"></i>
-                                <span>حجوزاتي</span>
-                                <span class="ml-2 bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full animate-pulse">{{ user.bookings.count }}</span>
-                            </a>
-                            <a href="{% url 'packages:wishlist_list' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                                <i class="fas fa-heart ml-3 text-blue-600 text-lg"></i>
-                                <span>قائمة الرغبات</span>
-                            </a>
-                            <a href="{% url 'analytics:analytics_dashboard' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                                <i class="fas fa-chart-line ml-3 text-blue-600 text-lg"></i>
-                                <span>التحليل</span>
-                            </a>
-                            <a href="{% url 'accounts:settings' %}" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 transition-colors duration-200 cursor-pointer">
-                                <i class="fas fa-cog ml-3 text-blue-600 text-lg"></i>
-                                <span>الإعدادات</span>
-                            </a>
-                            <hr class="my-2 border-blue-100">
-                            <a href="{% url 'accounts:logout' %}" class="flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 cursor-pointer">
-                                <i class="fas fa-sign-out-alt ml-3 text-lg"></i>
-                                <span>تسجيل خروج</span>
-                            </a>
-                        </div>
                     </div>
-                </div>
                 {% else %}
-                <a href="{% url 'accounts:login' %}" class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 border ml-3 border-purple-300 cursor-pointer">
-                    <i class="fas fa-sign-in-alt ml-2"></i>
-                    <span>تسجيل دخول</span>
-                </a>
-                <a href="{% url 'accounts:register' %}" class="flex items-center space-x-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 border pr-1 border-purple-300 cursor-pointer">
-                    <i class="fas fa-user-plus ml-2"></i>
-                    <span>تسجيل</span>
-                </a>
+                    <a href="{% url 'accounts:login' %}" 
+                       class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full text-sm font-medium hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        تسجيل دخول
+                    </a>
                 {% endif %}
             </div>
 
             <!-- Mobile Menu Button -->
-            <div class="md:hidden">
-                <button @click="toggleMenu()" 
-                        class="p-2 rounded-lg text-white hover:bg-white/10 backdrop-blur-sm transition-colors duration-200 cursor-pointer">
-                    <span class="sr-only">القائمة</span>
-                    <svg x-show="!isOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <div class="md:hidden flex items-center">
+                <button @click="isOpen = !isOpen" 
+                        class="rounded-lg p-2 text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none transition duration-300">
+                    <svg class="h-6 w-6" x-show="!isOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
-                    <svg x-show="isOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <svg class="h-6 w-6" x-show="isOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
@@ -150,58 +83,37 @@
     <!-- Mobile Menu -->
     <div x-show="isOpen" 
          x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 transform -translate-y-4"
+         x-transition:enter-start="opacity-0 transform -translate-y-2"
          x-transition:enter-end="opacity-100 transform translate-y-0"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="opacity-100 transform translate-y-0"
-         x-transition:leave-end="opacity-0 transform -translate-y-4"
-         class="md:hidden bg-white/95 backdrop-blur-md border-t border-blue-100">
-        <div class="px-4 py-3 space-y-1">
-            <a href="{% url 'packages:package_list' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-box-open ml-3 text-blue-600"></i>
-                <span>الباقات</span>
+         class="md:hidden bg-white border-t border-gray-200">
+        <div class="px-4 pt-2 pb-3 space-y-1">
+            <a href="{% url 'core:home' %}" class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition duration-300">
+                <i class="fas fa-home ml-2"></i>الرئيسية
             </a>
-            <a href="{% url 'blog:post_list' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-blog ml-3 text-blue-600"></i>
-                <span>المدونة</span>
-            </a>
-            <a href="{% url 'core:about' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-info-circle ml-3 text-blue-600"></i>
-                <span>عنا</span>
-            </a>
-            <a href="{% url 'core:contact' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-envelope ml-3 text-blue-600"></i>
-                <span>اتصل بنا</span>
+            <a href="{% url 'tours:list' %}" class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition duration-300">
+                <i class="fas fa-plane ml-2"></i>الرحلات
             </a>
             {% if user.is_authenticated %}
-            <a href="{% url 'accounts:profile' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-user-circle ml-3 text-blue-600"></i>
-                <span>الملف الشخصي</span>
-            </a>
-            <a href="{% url 'packages:booking_list' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-calendar-check ml-3 text-blue-600"></i>
-                <span>حجوزاتي</span>
-            </a>
-            <a href="{% url 'packages:wishlist_list' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-heart ml-3 text-blue-600"></i>
-                <span>قائمة الرغبات</span>
-            </a>
-            <a href="{% url 'accounts:settings' %}" class="flex items-center px-3 py-3 text-gray-700 hover:bg-blue-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-cog ml-3 text-blue-600"></i>
-                <span>الإعدادات</span>
-            </a>
-            <a href="{% url 'accounts:logout' %}" class="flex items-center px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200 cursor-pointer">
-                <i class="fas fa-sign-out-alt ml-3"></i>
-                <span>تسجيل خروج</span>
-            </a>
-            {% else %}
-            <div class="pt-4">
-                <a href="{% url 'accounts:login' %}" class="flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 cursor-pointer">
-                    <i class="fas fa-sign-in-alt ml-2"></i>
-                    <span>تسجيل دخول</span>
+                <hr class="my-2">
+                <a href="{% url 'accounts:profile' %}" class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition duration-300">
+                    <i class="fas fa-user ml-2"></i>حسابي
                 </a>
-            </div>
+                <a href="{% url 'accounts:settings' %}" class="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition duration-300">
+                    <i class="fas fa-cog ml-2"></i>الإعدادات
+                </a>
+                <a href="{% url 'accounts:logout' %}" class="block px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 transition duration-300">
+                    <i class="fas fa-sign-out-alt ml-2"></i>تسجيل خروج
+                </a>
+            {% else %}
+                <div class="px-4 py-3">
+                    <a href="{% url 'accounts:login' %}" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-lg text-base font-medium hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-md">
+                        تسجيل دخول
+                    </a>
+                </div>
             {% endif %}
         </div>
     </div>
 </nav>
+
+<!-- Spacer to prevent content from hiding under fixed navbar -->
+<div class="h-20"></div>
