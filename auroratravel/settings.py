@@ -27,15 +27,13 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 'django-insecure-dh##meh488(cs(=q!wyc*cj4#9hstkfd^sr567+ahs1q!3hufe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://tourismwebsite-production.up.railway.app",
 ]
 
-ALLOWED_HOSTS = [
-    "tourismwebsite-production.up.railway.app",
-]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
