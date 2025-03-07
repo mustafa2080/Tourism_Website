@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 'django-insecure-dh##meh488(cs(=q!wyc*cj4#9hstkfd^sr567+ahs1q!3hufe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ["auroratravel.up.railway.app", "127.0.0.1"]
