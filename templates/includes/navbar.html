@@ -73,9 +73,9 @@
     <div class="md:hidden" x-show="isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100">
         <div class="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200 bg-gray-50">
             <a href="{% url 'core:home' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">الرئيسية</a>
-            <a href="{% url 'core:blog' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">المدونة</a>
+            <a href="{% url 'blog:post_list' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">المدونة</a>
             <a href="{% url 'packages:wishlist_list' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">الباقات</a>
-            <a href="{% url 'core:interfaces' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">الواجهات</a>
+            <a href="{% url 'destinations:destination_list' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">الواجهات</a>
             <a href="{% url 'core:about' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">من نحن</a>
             <a href="{% url 'core:contact' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md">اتصل بنا</a>
             
