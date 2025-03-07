@@ -40,8 +40,18 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutes
     }
 }
+
+# Compression settings
+COMPRESS_ENABLED = True
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.rCSSMinFilter',
+]
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.JSMinFilter']
+COMPRESS_OFFLINE = True
 
 # Make sure MIDDLEWARE includes CSRF
 MIDDLEWARE = [
@@ -51,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',  # Make sure this is present
     'django.middleware.gzip.GZipMiddleware',  # Add this for compression
+    'django.middleware.cache.UpdateCacheMiddleware',  # Add this
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Add this
     # ...rest of your middleware...
 ]
 
