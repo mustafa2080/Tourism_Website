@@ -7,11 +7,11 @@ from django.views.generic import TemplateView, FormView, RedirectView
 from .forms import UserRegistrationForm, UserUpdateForm, UserLoginForm, ProfileForm, UserForm
 from .models import UserProfile
 from allauth.socialaccount.models import SocialApp
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils.decorators import method_decorator
 from django.conf import settings
 
-# تسجيل مستخدم جديد
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class RegisterView(FormView):
     template_name = 'accounts/register.html'
     form_class = UserRegistrationForm
@@ -25,7 +25,6 @@ class RegisterView(FormView):
         messages.success(self.request, 'تم تسجيل حسابك بنجاح!')
         return super().form_valid(form)
 
-# تسجيل الدخول
 @method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginView(FormView):
     template_name = 'accounts/login.html'
@@ -50,7 +49,6 @@ class LoginView(FormView):
         context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
         return context
 
-# تسجيل الخروج
 class LogoutView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return reverse('core:home')  # استخدام reverse لتوليد المسار
@@ -60,7 +58,6 @@ class LogoutView(RedirectView):
         messages.success(request, 'تم تسجيل الخروج بنجاح!')
         return super().get(request, *args, **kwargs)
 
-# عرض وتعديل الملف الشخصي
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/profile.html'
 
@@ -69,7 +66,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context['user_bookings'] = self.request.user.booking_set.all().order_by('-created_at')
         return context
 
-# تعديل الملف الشخصي
+@method_decorator(csrf_protect, name='dispatch')
 class ProfileEditView(LoginRequiredMixin, FormView):
     template_name = 'accounts/profile_edit.html'
     form_class = UserUpdateForm
@@ -87,7 +84,6 @@ class ProfileEditView(LoginRequiredMixin, FormView):
         messages.success(self.request, 'تم تحديث بياناتك بنجاح!')
         return super().form_valid(form)
 
-# تسجيل الدخول عبر Google
 class GoogleLoginView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         app = SocialApp.objects.get(provider='google')
@@ -97,7 +93,6 @@ class GoogleLoginView(RedirectView):
         state = 'random_state_string'
         return f'https://accounts.google.com/o/oauth2/auth?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}&state={state}&response_type=code'
 
-# تسجيل الدخول عبر Facebook
 class FacebookLoginView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         app = SocialApp.objects.get(provider='facebook')
@@ -107,7 +102,7 @@ class FacebookLoginView(RedirectView):
         state = 'random_state_string'
         return f'https://www.facebook.com/v7.0/dialog/oauth?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}&state={state}&response_type=code'
 
-# إعدادات المستخدم
+@method_decorator(csrf_protect, name='dispatch')
 class SettingsView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/settings.html'
 
@@ -124,7 +119,7 @@ class SettingsView(LoginRequiredMixin, TemplateView):
         
         return context
 
-    # views.py
+    @method_decorator(csrf_protect)
     def post(self, request, *args, **kwargs):
         user = request.user
         if 'user_form' in request.POST:
