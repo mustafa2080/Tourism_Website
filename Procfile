@@ -1,1 +1,1 @@
-"web: gunicorn auroratravel.wsgi --log-file -" 
+web: gunicorn auroratravel.wsgi:application --log-file -
