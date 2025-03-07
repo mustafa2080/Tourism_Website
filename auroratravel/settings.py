@@ -29,8 +29,8 @@ SECRET_KEY = 'django-insecure-dh##meh488(cs(=q!wyc*cj4#9hstkfd^sr567+ahs1q!3hufe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["auroratravel.up.railway.app"]
 
+ALLOWED_HOSTS = ["auroratravel.up.railway.app", "127.0.0.1", "localhost"]
 
 # Application definition
 
