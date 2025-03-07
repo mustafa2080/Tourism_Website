@@ -1,2 +1,1 @@
-web: gunicorn auroratravel.wsgi:application --log-file -
-web: python manage.py migrate && gunicorn auroratravel.wsgi
+web: python manage.py collectstatic --no-input && gunicorn auroratravel.wsgi
