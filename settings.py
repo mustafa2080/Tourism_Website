@@ -31,6 +31,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # WhiteNoise Configuration
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Image Optimization Settings
+IMAGEKIT_CACHE_BACKEND = 'default'
+IMAGEKIT_CACHE_TTL = 2592000  # 30 days cache
+
+# Cache Settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 # Make sure MIDDLEWARE includes CSRF
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -38,9 +50,13 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',  # Make sure this is present
+    'django.middleware.gzip.GZipMiddleware',  # Add this for compression
     # ...rest of your middleware...
 ]
 
 # For production
 DEBUG = False
 ALLOWED_HOSTS = ['*']  # Update with your Railway domain
+
+# WhiteNoise Settings
+WHITENOISE_MAX_AGE = 31536000  # 1 year

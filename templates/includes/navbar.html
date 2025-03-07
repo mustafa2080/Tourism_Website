@@ -1,14 +1,17 @@
 {% load static %}
 <nav class="bg-white shadow" x-data="{ isOpen: false }">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex flex-row-reverse justify-between h-16"> <!-- Changed to flex-row-reverse -->
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center">
-                <img class="h-8 w-auto" src="{% static 'admin/img/logo.png' %}" alt="Logo">
+                <img class="h-8 w-auto lazy" 
+                     data-src="{% static 'admin/img/logo.png' %}" 
+                     src="{% static 'admin/img/logo-placeholder.png' %}" 
+                     alt="Logo">
             </div>
 
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-4 space-x-reverse">
+            <div class="hidden md:flex items-center space-x-4 space-x-reverse mr-auto"> <!-- Added mr-auto -->
                 <a href="{% url 'core:home' %}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">الرئيسية</a>
                 {% comment %}
                 <!-- Uncomment when tours app is ready -->
