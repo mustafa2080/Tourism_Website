@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-dh##meh488(cs(=q!wyc*cj4#9hstkfd^sr567+ahs1q!3hufe
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["auroratravel.up.railway.app", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -73,6 +73,7 @@ LOGOUT_REDIRECT_URL = 'core:home'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -199,6 +200,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 SITE_ID = 1 
 
+STATICSTORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # payment getway
 PAYMOB_API_KEY = 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TVRBeE5qazRNeXdpYm1GdFpTSTZJbWx1YVhScFlXd2lmUS5kV21zc2ZHSTlNNy12RUdGNHJrRDBnX1g1dVdHMU1FUlhXeGlvRHRqVXpJS2FzVWdUTDRGV2tfaUh3Uk80eWptbGlIcjBTYXhiMVRPM05sQ0ZtUXVNQQ=='
 PAYMOB_INTEGRATION_ID = '4922775'  # Integration ID للدفع بالبطاقات
