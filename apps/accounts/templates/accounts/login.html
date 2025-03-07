@@ -13,7 +13,7 @@
             <p class="text-gray-600 mt-1">مرحباً بك مجدداً، يرجى تسجيل الدخول للمتابعة</p>
         </div>
 
-        <form method="POST" class="space-y-5">
+        <form method="POST" class="space-y-5" id="loginForm">
             {% csrf_token %}
             
             <!-- اسم المستخدم -->
@@ -35,7 +35,7 @@
                     <label class="block text-gray-700 font-medium mb-2" for="password">
                         كلمة المرور
                     </label>
-                    <a href="#" class="text-sm text-blue-500 hover:text-blue-700">نسيت كلمة المرور؟</a>
+                    <a href="{% url 'accounts:password_reset' %}" class="text-sm text-blue-500 hover:text-blue-700">نسيت كلمة المرور؟</a>
                 </div>
                 <div class="relative">
                     <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -47,9 +47,9 @@
                            class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            required>
                     <button type="button" 
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                            onclick="togglePasswordVisibility('password')">
-                        <i class="fas fa-eye" id="password-toggle-icon"></i>
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            onclick="togglePassword('password', 'togglePasswordIcon')">
+                        <i id="togglePasswordIcon" class="fas fa-eye"></i>
                     </button>
                 </div>
             </div>
@@ -61,8 +61,15 @@
             </div>
 
             <button type="submit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md">
-                تسجيل الدخول
+                    id="submitBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md flex items-center justify-center">
+                <span id="buttonText">تسجيل الدخول</span>
+                <span id="spinner" class="hidden mr-2">
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </span>
             </button>
         </form>
 
@@ -101,9 +108,50 @@
 </div>
 
 <script>
+// إضافة التابع الخاص بتبديل عرض كلمة المرور
 function togglePasswordVisibility(inputId) {
     const passwordInput = document.getElementById(inputId);
     const icon = document.getElementById(inputId + '-toggle-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// معالجة تقديم النموذج
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const submitBtn = document.getElementById('submitBtn');
+    const buttonText = document.getElementById('buttonText');
+    const spinner = document.getElementById('spinner');
+
+    // تعطيل الزر ومنع النقر المتكرر
+    if (submitBtn.disabled) {
+        e.preventDefault();
+        return;
+    }
+
+    // إظهار مؤشر التحميل
+    submitBtn.disabled = true;
+    buttonText.textContent = 'جاري تسجيل الدخول...';
+    spinner.classList.remove('hidden');
+
+    // إعادة تفعيل الزر بعد 30 ثانية كحد أقصى
+    setTimeout(() => {
+        submitBtn.disabled = false;
+        buttonText.textContent = 'تسجيل الدخول';
+        spinner.classList.add('hidden');
+    }, 30000);
+});
+
+function togglePassword(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';

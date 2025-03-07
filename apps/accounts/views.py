@@ -37,12 +37,20 @@ class LoginView(FormView):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
         user = authenticate(self.request, username=username, password=password)
+        
+        # إضافة تأخير قصير لتجنب الطلبات المتكررة
+        from time import sleep
+        sleep(0.5)
+        
         if user is not None:
             login(self.request, user)
             messages.success(self.request, 'تم تسجيل الدخول بنجاح!')
+            response = super().form_valid(form)
         else:
             messages.error(self.request, 'اسم المستخدم أو كلمة المرور غير صحيحة.')
-        return super().form_valid(form)
+            return self.form_invalid(form)
+        
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

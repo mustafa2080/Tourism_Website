@@ -42,7 +42,7 @@
             </div>
 
             <!-- كلمة المرور -->
-            <div class="mb-4 relative">
+            <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="password1">
                     كلمة المرور
                 </label>
@@ -56,16 +56,16 @@
                            class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                            required>
                     <button type="button" 
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                            onclick="togglePasswordVisibility('password1')">
-                        <i class="fas fa-eye" id="password1-toggle-icon"></i>
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            onclick="togglePassword('password1', 'togglePassword1Icon')">
+                        <i id="togglePassword1Icon" class="fas fa-eye"></i>
                     </button>
                 </div>
                 <p class="text-xs text-gray-500 mt-1">يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل مع مزيج من الأحرف والأرقام</p>
             </div>
 
             <!-- تأكيد كلمة المرور -->
-            <div class="mb-4 relative">
+            <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="password2">
                     تأكيد كلمة المرور
                 </label>
@@ -79,9 +79,9 @@
                            class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                            required>
                     <button type="button" 
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                            onclick="togglePasswordVisibility('password2')">
-                        <i class="fas fa-eye" id="password2-toggle-icon"></i>
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            onclick="togglePassword('password2', 'togglePassword2Icon')">
+                        <i id="togglePassword2Icon" class="fas fa-eye"></i>
                     </button>
                 </div>
             </div>
@@ -135,9 +135,9 @@
 </div>
 
 <script>
-function togglePasswordVisibility(inputId) {
+function togglePassword(inputId, iconId) {
     const passwordInput = document.getElementById(inputId);
-    const icon = document.getElementById(inputId + '-toggle-icon');
+    const icon = document.getElementById(iconId);
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
