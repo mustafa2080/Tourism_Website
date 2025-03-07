@@ -4,7 +4,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    # ...existing urls...
+    path('admin/', admin.site.urls),
+    path('accounts/', include('apps.accounts.urls')),
+    path('tours/', include('apps.tours.urls')),  # Add this line
+    path('', include('apps.core.urls')),
 ] 
 
 if settings.DEBUG:
