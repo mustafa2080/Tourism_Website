@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-dh##meh488(cs(=q!wyc*cj4#9hstkfd^sr567+ahs1q!3hufe
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["auroratravel.up.railway.app", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["auroratravel.up.railway.app", "127.0.0.1"]
 
 # Application definition
 
