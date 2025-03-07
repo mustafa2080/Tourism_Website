@@ -13,6 +13,7 @@ crispy-tailwind==1.0.3
 cryptography==44.0.2
 cycler==0.12.1
 decorator==4.4.2
+dj-database-url==2.3.0
 Django==5.1.6
 django-allauth==65.4.1
 django-credit-cards==0.4.1
@@ -25,6 +26,7 @@ et_xmlfile==2.0.0
 fonttools==4.56.0
 greenlet==3.1.1
 gTTS==2.5.4
+gunicorn==23.0.0
 idna==3.10
 imageio==2.37.0
 imageio-ffmpeg==0.6.0
@@ -54,6 +56,7 @@ plotly==6.0.0
 polib==1.2.0
 pooch==1.8.2
 proglog==0.1.10
+psycopg2-binary==2.9.10
 pycparser==2.22
 pydub==0.25.1
 pyjsparser==2.7.1
@@ -84,6 +87,8 @@ SQLAlchemy==2.0.38
 sqlparse==0.5.3
 tailwindcss==0.0.1
 threadpoolctl==3.5.0
+# Editable install with no version control (tourism_management==1.0.0)
+-e c:\users\mustafa sherif\desktop\»—‰«„Ã „Õ«”»Ì
 tqdm==4.67.1
 typing_extensions==4.12.2
 tzdata==2025.1
