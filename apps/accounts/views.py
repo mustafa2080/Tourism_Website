@@ -7,6 +7,9 @@ from django.views.generic import TemplateView, FormView, RedirectView
 from .forms import UserRegistrationForm, UserUpdateForm, UserLoginForm, ProfileForm, UserForm
 from .models import UserProfile
 from allauth.socialaccount.models import SocialApp
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+from django.conf import settings
 
 # تسجيل مستخدم جديد
 class RegisterView(FormView):
@@ -23,6 +26,7 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 # تسجيل الدخول
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class LoginView(FormView):
     template_name = 'accounts/login.html'
     form_class = UserLoginForm
@@ -40,6 +44,11 @@ class LoginView(FormView):
         else:
             messages.error(self.request, 'اسم المستخدم أو كلمة المرور غير صحيحة.')
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        return context
 
 # تسجيل الخروج
 class LogoutView(RedirectView):
