@@ -1,4 +1,60 @@
-<form method="POST">
-    {% csrf_token %}
-    <!-- ...existing form content... -->
-</form>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mt-8">
+    <h2 class="text-2xl font-bold mb-6 text-center">تسجيل الدخول</h2>
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        
+        <!-- اسم المستخدم -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                اسم المستخدم
+            </label>
+            {{ form.username|as_crispy_field }}
+        </div>
+
+        <!-- كلمة المرور مع أيقونة العين -->
+        <div class="mb-4 relative">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                كلمة المرور
+            </label>
+            <div class="relative">
+                <input type="password" 
+                       name="password" 
+                       id="password"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       required>
+                <button type="button" 
+                        class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        onclick="togglePasswordVisibility('password')">
+                    <i class="fas fa-eye" id="password-toggle-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <button type="submit" 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">
+            تسجيل الدخول
+        </button>
+    </form>
+</div>
+
+<script>
+function togglePasswordVisibility(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const icon = document.getElementById(inputId + '-toggle-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+{% endblock %}
