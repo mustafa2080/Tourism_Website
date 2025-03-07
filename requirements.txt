@@ -87,8 +87,6 @@ SQLAlchemy==2.0.38
 sqlparse==0.5.3
 tailwindcss==0.0.1
 threadpoolctl==3.5.0
-# Editable install with no version control (tourism_management==1.0.0)
--e c:\users\mustafa sherif\desktop\»—‰«„Ã „Õ«”»Ì
 tqdm==4.67.1
 typing_extensions==4.12.2
 tzdata==2025.1
