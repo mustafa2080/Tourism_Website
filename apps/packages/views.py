@@ -6,7 +6,6 @@ from .models import Package, Category, Wishlist, Review, Discount
 from django.urls import reverse
 from django.contrib import messages
 
-
 class PackageListView(ListView):
     model = Package
     template_name = 'packages/package_list.html'
@@ -14,23 +13,25 @@ class PackageListView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        return Package.objects.filter(is_active=True)
+        queryset = Package.objects.all()  # Remove is_active filter
+        category_slug = self.request.GET.get('category')
+        
+        if category_slug:
+            queryset = queryset.filter(category__slug=category_slug)
+            
+        sort_by = self.request.GET.get('sort')
+        if sort_by == 'price_low':
+            queryset = queryset.order_by('price')
+        elif sort_by == 'price_high':
+            queryset = queryset.order_by('-price')
+            
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         context['selected_category'] = self.request.GET.get('category')
         context['selected_sort'] = self.request.GET.get('sort')
-        
-        # إضافة الباقات ذات الصلة (إذا كانت هناك فئة محددة)
-        category = self.request.GET.get('category')
-        if category:
-            context['related_packages'] = Package.objects.filter(
-                category__slug=category
-            ).exclude(id__in=[p.id for p in context['packages']])[:3]
-        else:
-            context['related_packages'] = Package.objects.none()
-        
         return context
 
 class CategoryDetailView(ListView):
@@ -77,11 +78,23 @@ class PackageDetailView(DetailView):
     model = Package
     template_name = 'packages/package_detail.html'
     context_object_name = 'package'
+    slug_url_kwarg = 'slug'  # تحديد اسم المعامل في URL
+
+    def get_object(self, queryset=None):
+        # التأكد من أن الباقة نشطة
+        return get_object_or_404(Package, slug=self.kwargs['slug'], is_active=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # جلب الحجوزات المرتبطة بالباقة باستخدام related_name
-        context['bookings'] = self.object.booking_set.all()
+        package = self.get_object()
+        # إضافة معلومات إضافية للسياق
+        context['related_packages'] = Package.objects.filter(
+            category=package.category
+        ).exclude(id=package.id)[:3]
+        context['in_wishlist'] = Wishlist.objects.filter(
+            user=self.request.user,
+            package=package
+        ).exists() if self.request.user.is_authenticated else False
         return context
 
 # Review Views

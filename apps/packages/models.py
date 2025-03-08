@@ -45,6 +45,7 @@ class Package(models.Model):
     itinerary = models.TextField(help_text="تفاصيل الرحلة يوم بيوم")
     max_persons = models.PositiveIntegerField(default=10)
     is_featured = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     bookings = models.ForeignKey('bookings.Booking', on_delete=models.CASCADE, related_name='package_bookings', null=True, blank=True)
