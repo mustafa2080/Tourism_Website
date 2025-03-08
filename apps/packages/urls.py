@@ -14,7 +14,7 @@ from .views import (
 app_name = 'packages'
 
 urlpatterns = [
-    path('', PackageListView.as_view(), name='package_list'),
+    path('packages/', PackageListView.as_view(), name='package_list'),
     path('package/<slug:slug>/', PackageDetailView.as_view(), name='package_detail'),
     path('category/<slug:slug>/', CategoryDetailView.as_view(), name='category_detail'),
     path('wishlist/add/<int:package_id>/', WishlistAddView.as_view(), name='wishlist_add'),
