@@ -1,115 +1,76 @@
 <!-- templates/accounts/profile.html -->
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-<div class="bg-gray-50 min-h-screen py-12"
-     x-data="{ showContent: false }"
-     x-init="setTimeout(() => showContent = true, 100)">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div x-show="showContent"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform translate-y-4"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             class="bg-white rounded-lg shadow overflow-hidden">
-            
-            <!-- Profile Header -->
-            <div class="relative h-48 bg-blue-600">
-                <div class="absolute bottom-0 left-0 right-0 px-4 py-4 bg-gradient-to-t from-black/50">
-                    <div class="flex items-end">
-                        <div class="flex-shrink-0">
-                            {% if user.profile_image %}
-                            <img class="h-24 w-24 rounded-full border-4 border-white object-cover" src="{{ user.profile_image.url }}" alt="{{ user.username }}">
-                            {% else %}
-                            <div class="h-24 w-24 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center">
-                                <span class="text-2xl text-gray-600">{{ user.username.0|upper }}</span>
+<div class="min-h-screen bg-gray-50 pt-20">
+    <div class="container mx-auto px-4 py-8">
+        <!-- User Info Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="md:flex">
+                <!-- Profile Image Section -->
+                <div class="md:w-1/3 p-6 flex flex-col items-center border-b md:border-b-0 md:border-l border-gray-200">
+                    <img src="{{ user.profile_image.url }}" 
+                         alt="{{ user.username }}" 
+                         class="h-32 w-32 md:h-48 md:w-48 rounded-full object-cover border-4 border-blue-100">
+                    <h1 class="mt-4 text-xl md:text-2xl font-bold text-gray-900">{{ user.get_full_name|default:user.username }}</h1>
+                    <p class="text-gray-600 text-sm md:text-base">{{ user.email }}</p>
+                    <a href="{% url 'accounts:profile_edit' %}" 
+                       class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 text-sm md:text-base">
+                        <i class="fas fa-edit ml-2"></i>
+                        تعديل الملف الشخصي
+                    </a>
+                </div>
+
+                <!-- User Details Section -->
+                <div class="md:w-2/3 p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">معلومات الاتصال</h3>
+                            <div class="space-y-2 text-sm md:text-base">
+                                <p><span class="font-medium">الهاتف:</span> {{ user.phone|default:"غير محدد" }}</p>
+                                <p><span class="font-medium">العنوان:</span> {{ user.address|default:"غير محدد" }}</p>
                             </div>
-                            {% endif %}
                         </div>
-                        <div class="mr-4 mb-2 flex-1">
-                            <h1 class="text-2xl font-bold text-white">{{ user.get_full_name|default:user.username }}</h1>
-                            <p class="text-gray-200">{{ user.email }}</p>
-                        </div>
-                        <div class="mb-2">
-                            <a href="{% url 'accounts:profile_edit' %}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition hover:scale-105">
-                                <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                                </svg>
-                                تعديل الملف الشخصي
-                            </a>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2">تفضيلات السفر</h3>
+                            <div class="space-y-2 text-sm md:text-base">
+                                <p><span class="font-medium">العملة المفضلة:</span> {{ user.userprofile.preferred_currency }}</p>
+                                <p><span class="font-medium">تفضيلات السفر:</span> {{ user.userprofile.travel_preferences|default:"غير محدد" }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Profile Content -->
-            <div class="p-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Personal Information -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">المعلومات الشخصية</h3>
-                        <dl class="space-y-4">
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500">رقم الهاتف</dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ user.phone|default:"غير محدد" }}</dd>
-                            </div>
-                            <div>
-                                <dt class="text-sm font-medium text-gray-500">العنوان</dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ user.address|default:"غير محدد" }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-
-                    <!-- Bookings -->
-                    <div class="md:col-span-2">
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">الحجوزات السابقة</h3>
-                        {% if user_bookings %}
-                        <div class="space-y-4">
-                            {% for booking in user_bookings %}
-                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-lg font-medium text-gray-900">{{ booking.package.title }}</h4>
-                                        <p class="text-sm text-gray-500">تاريخ الحجز: {{ booking.created_at|date:"d/m/Y" }}</p>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-full text-sm 
-                                        {% if booking.status == 'confirmed' %}bg-green-100 text-green-800
-                                        {% elif booking.status == 'pending' %}bg-yellow-100 text-yellow-800
-                                        {% else %}bg-red-100 text-red-800{% endif %}">
-                                        {{ booking.get_status_display }}
-                                    </span>
-                                </div>
-                                <div class="mt-4">
-                                    <div class="flex items-center justify-between">
-                                        <div class="text-sm text-gray-600">
-                                            <p>عدد الأشخاص: {{ booking.number_of_persons }}</p>
-                                            <p>السعر الإجمالي: {{ booking.total_price }} ريال</p>
-                                        </div>
-                                        <a href="{% url 'bookings:booking_detail' booking.id %}" 
-                                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                            عرض التفاصيل
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
+        <!-- Recent Bookings -->
+        <div class="mt-8">
+            <h2 class="text-xl md:text-2xl font-bold mb-4">حجوزاتي الأخيرة</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for booking in user_bookings %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-lg font-semibold">{{ booking.package.name }}</h3>
+                            <span class="px-2 py-1 rounded-full text-xs {% if booking.status == 'pending' %}bg-yellow-100 text-yellow-800{% elif booking.status == 'confirmed' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                {{ booking.get_status_display }}
+                            </span>
                         </div>
-                        {% else %}
-                        <div class="bg-gray-50 p-6 text-center rounded-lg border-2 border-dashed border-gray-300">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">لا توجد حجوزات سابقة</h3>
-                            <p class="mt-1 text-sm text-gray-500">ابدأ بحجز رحلتك الأولى الآن</p>
-                            <div class="mt-6">
-                                <a href="{% url 'packages:package_list' %}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    استعرض الرحلات المتاحة
-                                </a>
-                            </div>
+                        <div class="space-y-2 text-sm">
+                            <p><span class="font-medium">تاريخ الحجز:</span> {{ booking.created_at|date:"d/m/Y" }}</p>
+                            <p><span class="font-medium">عدد المسافرين:</span> {{ booking.number_of_travelers }}</p>
+                            <p><span class="font-medium">السعر الإجمالي:</span> {{ booking.total_price }} جنيه</p>
                         </div>
-                        {% endif %}
+                        <a href="{% url 'bookings:booking_detail' booking.id %}" 
+                           class="mt-3 inline-block text-blue-600 hover:text-blue-800 text-sm">
+                            عرض التفاصيل →
+                        </a>
                     </div>
                 </div>
+                {% empty %}
+                <p class="col-span-full text-center text-gray-600">لا توجد حجوزات حالياً</p>
+                {% endfor %}
             </div>
         </div>
     </div>
