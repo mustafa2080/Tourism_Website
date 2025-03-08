@@ -56,6 +56,12 @@
                                 <a href="{% url 'bookings:my_bookings' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-calendar-check ml-2"></i>حجوزاتي
                                 </a>
+                                <a href="{% url 'packages:wishlist_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-heart ml-2"></i>المفضلة
+                                </a>
+                                <a href="{% url 'analytics:analytics_dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-chart-line ml-2"></i>التحليلات
+                                </a>
                                 {% if user.is_staff %}
                                 <a href="{% url 'admin:index' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-cog ml-2"></i>لوحة التحكم
@@ -119,6 +125,9 @@
                     </a>
                     <a href="{% url 'bookings:my_bookings' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                         <i class="fas fa-calendar-check ml-2"></i>حجوزاتي
+                    </a>
+                    <a href="{% url 'packages:wishlist_list' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
+                        <i class="fas fa-heart ml-2"></i>المفضلة
                     </a>
                     <a href="{% url 'analytics:analytics_dashboard' %}" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50">
                         <i class="fas fa-chart-line ml-2"></i>التحليلات
