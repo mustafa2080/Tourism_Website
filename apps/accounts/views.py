@@ -30,31 +30,22 @@ class LoginView(FormView):
     template_name = 'accounts/login.html'
     form_class = UserLoginForm
 
-    def get_success_url(self):
-        return reverse('core:home')  # استخدام reverse لتوليد المسار
-
     def form_valid(self, form):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
-        user = authenticate(self.request, username=username, password=password)
-        
-        # إضافة تأخير قصير لتجنب الطلبات المتكررة
-        from time import sleep
-        sleep(0.5)
+        user = authenticate(username=username, password=password)
         
         if user is not None:
             login(self.request, user)
-            messages.success(self.request, 'تم تسجيل الدخول بنجاح!')
-            response = super().form_valid(form)
+            messages.success(self.request, f'مرحباً {user.username}!')
+            return redirect('core:home')
         else:
-            messages.error(self.request, 'اسم المستخدم أو كلمة المرور غير صحيحة.')
+            messages.error(self.request, 'خطأ في اسم المستخدم أو كلمة المرور')
             return self.form_invalid(form)
-        
-        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        context['next'] = self.request.GET.get('next', '')
         return context
 
 class LogoutView(RedirectView):
