@@ -7,27 +7,26 @@
 {% block content %}
 
 <!-- Hero Section -->
-<!-- Hero Section -->
-<section class="relative h-screen">
+<section class="relative min-h-[60vh] md:h-screen">
     <!-- Swiper -->
     <div class="swiper-container h-full">
         <div class="swiper-wrapper">
             <!-- Slide 1 -->
-            <div class="swiper-slide relative">
+            <div class="swiper-slide relative h-[60vh] md:h-screen">
                 <img src="{% static 'admin/img/hurghada.jpg' %}" alt="مصر السياحية" 
                      class="w-full h-full object-cover"
                      onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
                 <div class="absolute inset-0 bg-black opacity-50"></div>
                 <div class="absolute inset-0 flex items-center justify-center text-center px-4">
                     <div class="max-w-4xl">
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                        <h1 class="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6">
                             اكتشف جمال مصر السياحي
                         </h1>
-                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                        <p class="text-base md:text-xl lg:text-2xl text-gray-200 mb-6 md:mb-8">
                             رحلات سياحية مميزة إلى أجمل المعالم السياحية في مصر
                         </p>
                         <a href="{% url 'packages:package_list' %}" 
-                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                           class="inline-block bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
                             اكتشف رحلاتنا
                         </a>
                     </div>
@@ -35,21 +34,21 @@
             </div>
 
             <!-- Slide 2 -->
-            <div class="swiper-slide relative">
+            <div class="swiper-slide relative h-[60vh] md:h-screen">
                 <img src="{% static 'admin/img/luxor.jpg' %}" alt="الأقصر السياحية" 
                      class="w-full h-full object-cover"
                      onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
                 <div class="absolute inset-0 bg-black opacity-50"></div>
                 <div class="absolute inset-0 flex items-center justify-center text-center px-4">
                     <div class="max-w-4xl">
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                        <h1 class="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6">
                             استمتع بجمال الأقصر
                         </h1>
-                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                        <p class="text-base md:text-xl lg:text-2xl text-gray-200 mb-6 md:mb-8">
                             رحلات إلى المعابد الفرعونية والمناظر الخلابة
                         </p>
                         <a href="{% url 'packages:package_list' %}" 
-                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                           class="inline-block bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
                             اكتشف رحلاتنا
                         </a>
                     </div>
@@ -57,21 +56,21 @@
             </div>
 
             <!-- Slide 3 -->
-            <div class="swiper-slide relative">
+            <div class="swiper-slide relative h-[60vh] md:h-screen">
                 <img src="{% static 'admin/img/sharm.jpg' %}" alt="شرم الشيخ السياحية" 
                      class="w-full h-full object-cover"
                      onerror="this.src='https://via.placeholder.com/1920x1080?text=صورة+سياحية'">
                 <div class="absolute inset-0 bg-black opacity-50"></div>
                 <div class="absolute inset-0 flex items-center justify-center text-center px-4">
                     <div class="max-w-4xl">
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                        <h1 class="text-2xl md:text-4xl lg:text-6xl font-bold text-white mb-4 md:mb-6">
                             استمتع بشواطئ شرم الشيخ
                         </h1>
-                        <p class="text-xl md:text-2xl text-gray-200 mb-8">
+                        <p class="text-base md:text-xl lg:text-2xl text-gray-200 mb-6 md:mb-8">
                             رحلات إلى أجمل الشواطئ والمنتجعات الفاخرة
                         </p>
                         <a href="{% url 'packages:package_list' %}" 
-                           class="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
+                           class="inline-block bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-sm md:text-lg font-semibold hover:bg-blue-700 transform transition hover:scale-105">
                             اكتشف رحلاتنا
                         </a>
                     </div>
@@ -82,27 +81,27 @@
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
 
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+        <!-- Add Navigation (hidden on mobile) -->
+        <div class="hidden md:block swiper-button-next"></div>
+        <div class="hidden md:block swiper-button-prev"></div>
     </div>
 </section>
 
 <!-- Popular Destinations Section -->
-<section class="py-16 px-4 bg-gray-50" id="destinations">
+<section class="py-8 md:py-16 px-4 bg-gray-50" id="destinations">
     <div class="container mx-auto">
-        <h2 class="text-3xl font-bold text-center mb-12">الوجهات السياحية المميزة</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">الوجهات السياحية المميزة</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {% for destination in featured_destinations %}
             <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                 <img src="{{ destination.image.url }}" alt="{{ destination.name }}" 
-                     class="w-full h-50 object-cover"
+                     class="w-full h-48 md:h-50 object-cover"
                      onerror="this.src='https://via.placeholder.com/400x300?text=صورة+غير+متاحة'">
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold mb-2">{{ destination.name }}</h3>
-                    <p class="text-gray-600 mb-4">{{ destination.description|truncatechars:100 }}</p>
+                <div class="p-4 md:p-6">
+                    <h3 class="text-lg md:text-xl font-semibold mb-2">{{ destination.name }}</h3>
+                    <p class="text-gray-600 text-sm md:text-base mb-4">{{ destination.description|truncatechars:100 }}</p>
                     <a href="{% url 'destinations:destination_detail' destination.slug %}" 
-                       class="text-blue-600 font-semibold hover:text-blue-800">
+                       class="text-blue-600 font-semibold hover:text-blue-800 text-sm md:text-base">
                         اكتشف المزيد →
                     </a>
                 </div>
@@ -276,6 +275,24 @@
             fadeEffect: {
                 crossFade: true
             },
+            // تحسين الأداء على الموبايل
+            watchOverflow: true,
+            touchRatio: 1,
+            speed: 600,
+            breakpoints: {
+                // عند عرض الشاشة 640px أو أكثر
+                640: {
+                    slidesPerView: 1
+                },
+                // عند عرض الشاشة 768px أو أكثر
+                768: {
+                    slidesPerView: 1
+                },
+                // عند عرض الشاشة 1024px أو أكثر
+                1024: {
+                    slidesPerView: 1
+                }
+            }
         });
     });
 </script>
