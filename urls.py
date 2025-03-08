@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('tours/', include('apps.tours.urls')),
+    path('destinations/', include('apps.destinations.urls')),  # Add this line
     path('', cache_page(60 * 15)(include('apps.core.urls'))),  # Cache for 15 minutes
 ] 
 

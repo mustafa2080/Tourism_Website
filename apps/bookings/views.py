@@ -12,133 +12,125 @@ import json
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from apps.packages.models import Package
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic.edit import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views import View
 from apps.analytics.models import BookingAnalysis
 
-@login_required
-def bank_payment(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    
-    if request.method == 'POST':
-        form = BankPaymentForm(request.POST, request.FILES)
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.booking = booking
-            payment.amount = booking.total_price
-            payment.save()
-            
-            # تحديث حالة الحجز إلى "تم الدفع"
-            booking.status = 'confirmed'
-            booking.save()
-            
-            messages.success(request, 'تم تسجيل الدفع بنجاح!')
-            return redirect('bookings:booking_detail', booking_id=booking.id)
-        else:
-            messages.error(request, 'حدث خطأ أثناء معالجة الدفع. يرجى التحقق من البيانات المدخلة.')
-    else:
-        form = BankPaymentForm(initial={'amount': booking.total_price})
-    
-    return render(request, 'bookings/bank_payment.html', {
-        'form': form,
-        'booking': booking
-    })
+class BookingListView(LoginRequiredMixin, ListView):
+    model = Booking
+    template_name = 'bookings/my_bookings.html'
+    context_object_name = 'bookings'
 
-@login_required
-def confirm_payment(request, booking_id):
-    if not request.user.is_staff:
-        messages.error(request, 'غير مصرح لك بتأكيد الدفع')
-        return redirect('bookings:booking_list')
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+
+class BookingDetailView(LoginRequiredMixin, DetailView):
+    model = Booking
+    template_name = 'bookings/booking_detail.html'
+    context_object_name = 'booking'
+    pk_url_kwarg = 'booking_id'
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+
+class CreateBookingView(LoginRequiredMixin, CreateView):
+    model = Booking
+    form_class = BookingForm
+    template_name = 'bookings/create_booking.html'
+    success_url = reverse_lazy('bookings:my_bookings')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.package = get_object_or_404(Package, id=self.kwargs['package_id'])
+        form.instance.total_price = form.instance.package.price * form.cleaned_data['number_of_persons']
+        response = super().form_valid(form)
         
-    booking = get_object_or_404(Booking, id=booking_id)
-    payment = get_object_or_404(BankPayment, booking=booking)
-    
-    payment.payment_status = 'completed'
-    payment.save()
-    
-    booking.status = 'confirmed'
-    booking.save()
-    
-    messages.success(request, 'تم تأكيد الدفع بنجاح')
-    return redirect('bookings:booking_detail', booking_id=booking.id)
-
-
-
-# bookings/views.py
-def create_booking(request, package_id):
-    package = get_object_or_404(Package, id=package_id)
-    
-    if request.method == 'POST':
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            booking = form.save(commit=False)
-            booking.user = request.user
-            booking.package = package
-            booking.total_price = package.price * form.instance.number_of_persons
-            booking.save()
-
-            # تسجيل بيانات الحجز في BookingAnalysis
-            BookingAnalysis.objects.create(
-                total_bookings=1,
-                total_revenue=booking.total_price,
-                bookings_by_status={booking.status: 1},
-                bookings_by_destination={package.destination.name: 1},
-                bookings_by_month={booking.booking_date.strftime('%B'): 1},
-            )
-
-            messages.success(request, 'تم إنشاء الحجز بنجاح!')
-            return redirect('bookings:booking_detail', booking_id=booking.id)
-    else:
-        form = BookingForm(initial={'package': package})
-    
-    return render(request, 'bookings/create_booking.html', {
-        'form': form,
-        'package': package
-    })
-    
-
-@login_required
-def confirm_booking(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    
-    # هنا هنغير حالة الحجز لـ "مؤكد"
-    booking.status = 'confirmed'
-    booking.save()
-    
-    # بعد التأكيد، نودي اليوزر لصفحة الدفع
-    messages.success(request, 'تم تأكيد الحجز بنجاح! يرجى إكمال عملية الدفع.')
-    return redirect('bookings:bank_payment', booking_id=booking.id)
-
-
-@login_required
-def paymob_payment(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    
-    try:
-        # الحصول على token للتفويض
-        auth_token = get_paymob_auth_token()
-        
-        # إنشاء طلب دفع
-        order_id = create_paymob_order(booking, auth_token)
-        
-        # إنشاء مفتاح دفع
-        payment_key = get_payment_key(auth_token, order_id, booking)
-        
-        # حفظ معلومات الدفع في قاعدة البيانات
-        payment = PaymobPayment.objects.create(
-            user=request.user,
-            booking=booking,
-            amount=booking.total_price,
-            paymob_order_id=order_id,
-            payment_status='pending'
+        # Create booking analysis
+        BookingAnalysis.objects.create(
+            total_bookings=1,
+            total_revenue=form.instance.total_price,
+            bookings_by_status={form.instance.status: 1},
+            bookings_by_destination={form.instance.package.destination.name: 1},
+            bookings_by_month={form.instance.booking_date.strftime('%B'): 1},
         )
         
-        # توجيه المستخدم إلى صفحة الدفع
-        return redirect(f"https://accept.paymob.com/api/acceptance/iframes/{settings.PAYMOB_IFRAME_ID}?payment_token={payment_key}")
+        messages.success(self.request, 'تم إنشاء الحجز بنجاح!')
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['package'] = get_object_or_404(Package, id=self.kwargs['package_id'])
+        return context
+
+class ConfirmBookingView(LoginRequiredMixin, View):
+    def post(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+        booking.status = 'confirmed'
+        booking.save()
+        messages.success(request, 'تم تأكيد الحجز بنجاح! يرجى إكمال عملية الدفع.')
+        return redirect('bookings:bank_payment', booking_id=booking.id)
+
+class CancelBookingView(LoginRequiredMixin, View):
+    def post(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+        if booking.status in ['pending', 'confirmed']:
+            booking.status = 'cancelled'
+            booking.save()
+            messages.success(request, 'تم إلغاء الحجز بنجاح.')
+        else:
+            messages.error(request, 'لا يمكن إلغاء الحجز في حالته الحالية.')
+        return redirect('bookings:my_bookings')
+
+class BankPaymentView(LoginRequiredMixin, FormView):
+    template_name = 'bookings/bank_payment.html'
+    form_class = BankPaymentForm
     
-    except Exception as e:
-        messages.error(request, f"فشلت عملية الدفع: {str(e)}")
-        return redirect('bookings:booking_detail', booking_id=booking.id)
-    
+    def get_success_url(self):
+        return reverse_lazy('bookings:booking_detail', kwargs={'booking_id': self.kwargs['booking_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['booking'] = get_object_or_404(Booking, id=self.kwargs['booking_id'], user=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        booking = get_object_or_404(Booking, id=self.kwargs['booking_id'], user=self.request.user)
+        payment = form.save(commit=False)
+        payment.booking = booking
+        payment.amount = booking.total_price
+        payment.save()
+        
+        booking.status = 'confirmed'
+        booking.save()
+        
+        messages.success(self.request, 'تم تسجيل الدفع بنجاح!')
+        return super().form_valid(form)
+
+class PaymobPaymentView(LoginRequiredMixin, View):
+    def get(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+        try:
+            auth_token = get_paymob_auth_token()
+            order_id = create_paymob_order(booking, auth_token)
+            payment_key = get_payment_key(auth_token, order_id, booking)
+            
+            PaymobPayment.objects.create(
+                user=request.user,
+                booking=booking,
+                amount=booking.total_price,
+                paymob_order_id=order_id,
+                payment_status='pending'
+            )
+            
+            return redirect(f"https://accept.paymob.com/api/acceptance/iframes/{settings.PAYMOB_IFRAME_ID}?payment_token={payment_key}")
+        except Exception as e:
+            messages.error(request, f"فشلت عملية الدفع: {str(e)}")
+            return redirect('bookings:booking_detail', booking_id=booking.id)
+
+# Keep the paymob_webhook view as is since it needs to be function-based for CSRF exemption
 @csrf_exempt
 def paymob_webhook(request):
     if request.method == 'POST':
@@ -169,27 +161,24 @@ def paymob_webhook(request):
     return HttpResponse(status=400)
 
 
-@login_required
-def booking_detail(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    return render(request, 'bookings/booking_detail.html', {
-        'booking': booking
-    })
-    
-    
-def cancel_booking(request, booking_id):
-    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-    
-    if booking.status == 'pending' or booking.status == 'confirmed':
-        booking.status = 'cancelled'
-        booking.save()
-        messages.success(request, 'تم إلغاء الحجز بنجاح.')
-    else:
-        messages.error(request, 'لا يمكن إلغاء الحجز في حالته الحالية.')
-    
-    return redirect('bookings:booking_list')  # أو أي صفحة أخرى تريد التوجيه إليها
 
+# Booking Views
+class BookingCreateView(LoginRequiredMixin, CreateView):
+    model = Booking
+    fields = ['number_of_persons']
+    template_name = 'packages/booking_form.html'
 
-def booking_list(request):
-    bookings = Booking.objects.filter(user=request.user)
-    return render(request, 'packages/booking_list.html', {'bookings': bookings})
+    def form_valid(self, form):
+        package = get_object_or_404(Package, slug=self.kwargs['slug'])
+        form.instance.user = self.request.user
+        form.instance.package = package
+        form.instance.total_price = package.price * form.instance.number_of_persons
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('packages:booking_detail', kwargs={'booking_id': self.object.id})
+
+class BookingDetailView(LoginRequiredMixin, DetailView):
+    model = Booking
+    template_name = 'packages/booking_detail.html'
+    context_object_name = 'booking'

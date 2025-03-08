@@ -5,7 +5,6 @@ app_name = 'destinations'
 
 urlpatterns = [
     path('', views.destination_list, name='destination_list'),
-    path('<slug:slug>/', views.destination_detail, name='destination_detail'),
-    path('search/', views.search_destinations, name='search'),
-    path('category/<slug:category_slug>/', views.destination_by_category, name='destination_by_category'),
+    path('search/', views.destination_search, name='search'),
+    path('<slug:slug>/', views.destination_detail, name='destination_detail'),  # Changed from pk to slug
 ]

@@ -5,12 +5,10 @@ from . import views
 app_name = 'bookings'
 
 urlpatterns = [
-    path('create/<int:package_id>/', views.create_booking, name='create_booking'),
-    path('confirm/<int:booking_id>/', views.confirm_booking, name='confirm_booking'),
-    path('payment/<int:booking_id>/', views.bank_payment, name='bank_payment'),  # تأكد من وجود هذا المسار
-    path('booking/<int:booking_id>/', views.booking_detail, name='booking_detail'),
-    path('paymob/webhook/', views.paymob_webhook, name='paymob_webhook'),
-    path('bookings/cancel/<int:booking_id>/', views.cancel_booking, name='cancel_booking'),
-    path('bookings/', views.booking_list, name='booking_list'),
-    path('paymob_payment/<int:booking_id>/', views.paymob_payment, name='paymob_payment'),  # إضافة هذا المسار
+    path('', views.BookingListView.as_view(), name='my_bookings'),
+    path('create/<int:package_id>/', views.CreateBookingView.as_view(), name='create_booking'),
+    path('<int:booking_id>/', views.BookingDetailView.as_view(), name='booking_detail'),
+    path('confirm/<int:booking_id>/', views.ConfirmBookingView.as_view(), name='confirm_booking'),
+    path('cancel/<int:booking_id>/', views.CancelBookingView.as_view(), name='cancel_booking'),
+    path('webhook/', views.paymob_webhook, name='paymob_webhook'),
 ]

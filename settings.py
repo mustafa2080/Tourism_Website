@@ -1,5 +1,11 @@
 # ...existing code...
 
+INSTALLED_APPS = [
+    # ...existing code...
+    'apps.destinations',
+    # ...existing code...
+]
+
 # CSRF Settings
 CSRF_TRUSTED_ORIGINS = [
     'https://tourismwebsite-production.up.railway.app',

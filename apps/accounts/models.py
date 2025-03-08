@@ -16,6 +16,13 @@ class User(AbstractUser):
     
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        default='avatars/default-avatar.png',
+        blank=True,
+        null=True,
+        verbose_name='الصورة الشخصية'
+    )
     newsletter_subscription = models.BooleanField(default=False)
     preferred_currency = models.CharField(max_length=3, default='USD')
     travel_preferences = models.TextField(blank=True)

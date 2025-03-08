@@ -2,10 +2,9 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Package, Category, Wishlist, Review, Discount, Package
+from .models import Package, Category, Wishlist, Review, Discount
 from django.urls import reverse
-from django.contrib import messages  # أضف هذا الاستيراد
-from apps.bookings.models import Booking
+from django.contrib import messages
 
 
 class PackageListView(ListView):
@@ -15,23 +14,7 @@ class PackageListView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        
-        # التصفية حسب الفئة (إذا تم تمريرها)
-        category = self.request.GET.get('category')
-        if category:
-            queryset = queryset.filter(category__slug=category)
-        
-        # الترتيب (إذا تم تمريره)
-        sort = self.request.GET.get('sort')
-        if sort == 'price_low':
-            queryset = queryset.order_by('price')
-        elif sort == 'price_high':
-            queryset = queryset.order_by('-price')
-        elif sort == 'duration':
-            queryset = queryset.order_by('duration')
-        
-        return queryset
+        return Package.objects.filter(is_active=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,7 +66,7 @@ class WishlistRemoveView(LoginRequiredMixin, ListView):
 
 class WishlistListView(LoginRequiredMixin, ListView):
     model = Wishlist
-    template_name = 'packages/wishlist_list.html'
+    template_name = 'packages/wishlist.html'
     context_object_name = 'wishlist_items'
 
     def get_queryset(self):
@@ -128,26 +111,6 @@ class DiscountListView(ListView):
     template_name = 'packages/discount_list.html'
     context_object_name = 'discounts'
 
-# Booking Views
-class BookingCreateView(LoginRequiredMixin, CreateView):
-    model = Booking
-    fields = ['number_of_persons']
-    template_name = 'packages/booking_form.html'
-
-    def form_valid(self, form):
-        package = get_object_or_404(Package, slug=self.kwargs['slug'])
-        form.instance.user = self.request.user
-        form.instance.package = package
-        form.instance.total_price = package.price * form.instance.number_of_persons
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('packages:booking_detail', kwargs={'booking_id': self.object.id})
-
-class BookingDetailView(LoginRequiredMixin, DetailView):
-    model = Booking
-    template_name = 'packages/booking_detail.html'
-    context_object_name = 'booking'
 
 # Search View
 class PackageSearchView(ListView):
@@ -158,27 +121,3 @@ class PackageSearchView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         return Package.objects.filter(name__icontains=query)
-    
-    
-class BookingListView(LoginRequiredMixin, ListView):
-    model = Booking
-    template_name = 'packages/booking_list.html'
-    context_object_name = 'bookings'
-
-    def get_queryset(self):
-        return Booking.objects.filter(user=self.request.user)
-    
-
-class CancelBookingView(LoginRequiredMixin, ListView):
-    def get(self, request, *args, **kwargs):
-        booking_id = kwargs.get('booking_id')
-        booking = get_object_or_404(Booking, id=booking_id, user=request.user)
-        
-        if booking.status == 'pending' or booking.status == 'confirmed':
-            booking.status = 'cancelled'
-            booking.save()
-            messages.success(request, 'تم إلغاء الحجز بنجاح.')
-        else:
-            messages.error(request, 'لا يمكن إلغاء الحجز في حالته الحالية.')
-        
-        return redirect('packages:booking_list')  # أو أي صفحة أخرى تريد التوجيه إليها

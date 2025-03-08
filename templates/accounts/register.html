@@ -143,74 +143,58 @@
 
                 <!-- Password Field -->
                 <div class="relative" 
-                     x-data="{ showPassword: false, focused: false }"
-                     x-show="showForm"
-                     x-transition:enter="transition ease-out duration-500 delay-600"
-                     x-transition:enter-start="opacity-0 transform translate-y-4"
-                     x-transition:enter-end="opacity-100 transform translate-y-0">
+                     x-data="{ showPassword: false, focused: false }">
                     <label for="{{ form.password1.id_for_label }}" 
-                           class="block text-sm font-medium text-gray-700 mb-1 transition-all duration-300"
-                           :class="{'text-blue-600': focused}">
+                           class="block text-sm font-medium text-gray-700 mb-1">
                         كلمة المرور
                     </label>
                     <div class="relative">
-                        <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none transition-all duration-300"
-                             :class="{'text-blue-500': focused}">
+                        <div class="absolute right-0 inset-y-0 flex items-center pr-3">
                             <i class="fas fa-lock" :class="{'text-gray-400': !focused, 'text-blue-500': focused}"></i>
                         </div>
-                        <input :type="showPassword ? 'text' : 'password'"
+                        <input type="password"
                                name="password1"
                                id="{{ form.password1.id_for_label }}"
-                               class="pr-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 transform"
-                               :class="{'scale-[1.01] shadow-md': focused}"
+                               placeholder="أدخل كلمة المرور"
+                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               :type="showPassword ? 'text' : 'password'"
                                @focus="focused = true"
-                               @blur="focused = false">
+                               @blur="focused = false"
+                               required>
                         <button type="button" 
-                                @click="showPassword = !showPassword"
-                                class="absolute left-0 inset-y-0 pl-3 flex items-center transition-all duration-300 transform hover:scale-110">
-                            <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'" 
-                               :class="{'text-gray-400': !focused, 'text-blue-500': focused}"></i>
+                                @click.prevent="showPassword = !showPassword"
+                                class="absolute left-0 inset-y-0 pl-3 flex items-center">
+                            <i class="fas" :class="showPassword ? 'fa-eye-slash text-blue-500' : 'fa-eye text-gray-400'"></i>
                         </button>
                     </div>
-                    {% if form.password1.errors %}
-                    <p class="mt-2 text-sm text-red-600 animate-pulse">{{ form.password1.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
                 <!-- Confirm Password Field -->
                 <div class="relative" 
-                     x-data="{ showPassword: false, focused: false }"
-                     x-show="showForm"
-                     x-transition:enter="transition ease-out duration-500 delay-700"
-                     x-transition:enter-start="opacity-0 transform translate-y-4"
-                     x-transition:enter-end="opacity-100 transform translate-y-0">
+                     x-data="{ showPassword: false, focused: false }">
                     <label for="{{ form.password2.id_for_label }}" 
-                           class="block text-sm font-medium text-gray-700 mb-1 transition-all duration-300"
-                           :class="{'text-blue-600': focused}">
+                           class="block text-sm font-medium text-gray-700 mb-1">
                         تأكيد كلمة المرور
                     </label>
                     <div class="relative">
-                        <div class="absolute right-0 inset-y-0 flex items-center pr-3 pointer-events-none transition-all duration-300"
-                             :class="{'text-blue-500': focused}">
+                        <div class="absolute right-0 inset-y-0 flex items-center pr-3">
                             <i class="fas fa-lock" :class="{'text-gray-400': !focused, 'text-blue-500': focused}"></i>
                         </div>
-                        <input :type="showPassword ? 'text' : 'password'"
+                        <input type="password"
                                name="password2"
                                id="{{ form.password2.id_for_label }}"
-                               class="pr-10 appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 transform"
-                               :class="{'scale-[1.01] shadow-md': focused}"
+                               placeholder="تأكيد كلمة المرور"
+                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               :type="showPassword ? 'text' : 'password'"
                                @focus="focused = true"
-                               @blur="focused = false">
+                               @blur="focused = false"
+                               required>
                         <button type="button" 
-                                @click="showPassword = !showPassword"
-                                class="absolute left-0 inset-y-0 pl-3 flex items-center transition-all duration-300 transform hover:scale-110">
-                            <i class="fas" :class="showPassword ? 'fa-eye-slash' : 'fa-eye'" 
-                               :class="{'text-gray-400': !focused, 'text-blue-500': focused}"></i>
+                                @click.prevent="showPassword = !showPassword"
+                                class="absolute left-0 inset-y-0 pl-3 flex items-center">
+                            <i class="fas" :class="showPassword ? 'fa-eye-slash text-blue-500' : 'fa-eye text-gray-400'"></i>
                         </button>
                     </div>
-                    {% if form.password2.errors %}
-                    <p class="mt-2 text-sm text-red-600 animate-pulse">{{ form.password2.errors.0 }}</p>
-                    {% endif %}
                 </div>
 
                 <!-- Submit Button -->
